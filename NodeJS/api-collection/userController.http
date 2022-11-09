@@ -1,0 +1,37 @@
+@url = http://localhost:3000
+
+####
+# @name sign_up
+POST {{url}}/users/register
+Content-type: application/json
+
+{
+  "name": "Admin Admin",
+  "email": "admin@example.com",
+  "password": "test123"
+}
+
+###
+
+# @name login
+POST {{url}}/users/login
+Content-type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "test123"
+}
+###
+
+@access-token = {{login.response.headers.access-token}}
+@uid = {{login.response.headers.uid}}
+
+###
+
+
+###
+# @name test_login
+GET {{url}}/users/welcome
+uid: {{uid}}
+access-token: {{access-token}}
+
