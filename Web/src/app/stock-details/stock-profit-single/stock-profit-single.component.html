@@ -1,0 +1,26 @@
+<table *ngFor="let profits of service.singleProfitView">
+    <thead>
+        <th scope="col">{{profits.stockName}}</th>
+    </thead>
+    <tr>
+      <td class="col">Total Units : {{profits.totalUnits}}</td>
+    </tr>
+    <tr>
+        <td class="col">Sold Amount : {{profits.soldAmount}}</td>
+    </tr>
+    <tr>
+        <td class="col">Total Investment : {{profits.totalInvestment}}</td>
+    </tr>
+    <tr>
+          <td class="col">Current Amount : {{profits.currentAmount}}</td>
+    </tr>
+    <tr>
+        <div *ngIf="profits.profit>0 else otherwise">
+          <td class="col">Overall profit : {{profits.profit}}</td>
+        </div>
+        <ng-template #otherwise>
+            <td class="col">Overall Loss : {{-profits.profit}}</td>
+        </ng-template>
+    </tr>
+    <br>
+</table>

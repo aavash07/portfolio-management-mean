@@ -1,0 +1,24 @@
+<table>
+      <tr>
+        <td class="col">Total Units : {{service.profitView.totalUnits}}</td>
+      </tr>
+      <tr>
+          <td class="col">Sold Amount : {{service.profitView.soldAmount}}</td>
+      </tr>
+      <tr>
+          <td class="col">Total Investment : {{service.profitView.totalInvestment}}</td>
+      </tr>
+      <tr>
+            <td class="col">Current Amount : {{service.profitView.currentAmount}}</td>
+      </tr>
+      <tr>
+        <div *ngIf="service.profitView.profit>0 else otherwise">
+            <td class="col">Profit : {{service.profitView.profit}}</td>
+        </div>
+        <ng-template #otherwise>
+          <td class="col">Loss : {{-service.profitView.profit}}</td>
+        </ng-template>
+            
+      </tr>
+  
+  </table>

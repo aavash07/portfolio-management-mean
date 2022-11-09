@@ -1,0 +1,45 @@
+<form noValidate autocomplete="off" #form="ngForm" (submit)="onSubmit(form)">
+    <input type="hidden" name="transactionId" [value]="service.formData._id"/>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label >Stock Name</label><br>
+            <select name="stockId" id="stockId" #stockId="ngModel" [(ngModel)]="service.formData._id">
+                <option value="" selected disabled>Please select A Stock</option>
+                <option  *ngFor="let s of stockServices.list" [value]="s._id">{{s.stockName}}</option>
+              </select>
+        </div>
+        <div class="form-group col-md-6">
+            <label >Transaction Type</label><br>
+            <select name="transactionType" id="transactionType" #transactionType="ngModel" [(ngModel)]="service.formData.transactionType">
+                <option value="" selected disabled>Please select a transaction Type</option>
+                <option value="buy">Buy</option>
+                <option value="sale">Sale</option>
+              </select>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label >Quantity</label>
+            <input type="number" class="form-control form-control-lg" placeholder="Quantity"
+            name="quantity" #quantity="ngModel" [(ngModel)]="service.formData.quantity"
+            [class.invalid]="quantity.invalid && quantity.touched">
+        </div>
+        <div class="form-group col-md-6">
+            <label >Amount</label>
+            <input class="form-control form-control-lg" placeholder="Amount"
+            name="amount" #amount="ngModel" [(ngModel)]="service.formData.amount"
+            [class.invalid]="amount.invalid && amount.touched">
+        </div>
+        <div class="form-group col-md-6">
+            <label >Tranaction Date </label>
+            <input class="form-control form-control-lg" placeholder="MM/DD/YYYY" type="date"
+            name="transactionDate" #transactionDate="ngModel" [(ngModel)]="service.formData.transactionDate"
+            [class.invalid]="transactionDate.invalid && transactionDate.touched">
+        </div>
+
+    </div>
+
+    <div class="form-group">
+        <button class="btn btn-info btn-lg btn-block" type="submit" [disabled]="form.invalid">SUBMIT</button>
+    </div>
+</form>>
