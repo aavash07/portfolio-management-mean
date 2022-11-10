@@ -1,0 +1,23 @@
+@url = http://localhost:3000
+
+####
+# @name all_stocks_details
+GET {{url}}/stock_details
+
+####
+# @name all_stocks_details
+POST {{url}}/stock_details
+Content-Type: application/json
+
+{
+    "amount": "500",
+    "quantity": 10,
+    "stockId": "6368079143363b6755aff0c3",
+    "transactionDate": "2022-11-11",
+    "transactionType": "buy"
+}
+
+###
+
+# @name delete_stock_detail
+DELETE  {{url}}/stock_details/636d51c3caf2ba8a27ff5434

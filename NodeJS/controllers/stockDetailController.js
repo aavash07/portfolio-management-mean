@@ -33,14 +33,14 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-  var StockDetail = new Stock({
+  var stockDetail = new StockDetail({
     transactionType: req.body.transactionType,
     quantity: req.body.quantity,
-    amount: req.body.quantity,
-    transactionDate: req.body.quantity,
-    stock: req.body.stock_id,
+    amount: req.body.amount,
+    transactionDate: req.body.transactionDate,
+    stockId: req.body.stockId,
   });
-  StockDetail.save((err, docs) => {
+  stockDetail.save((err, docs) => {
     if (!err) {
       res.send(docs);
     } else {
@@ -55,17 +55,17 @@ router.put('/:id', (req, res) => {
   if (!ObjectId.isValid(req.params.id))
     return res.status(400).send('No record with id ' + req.params.id);
 
-  var StockDetail = {
+  var stockDetail = {
     transactionType: req.body.transactionType,
     quantity: req.body.quantity,
     amount: req.body.quantity,
     transactionDate: req.body.quantity,
-    stock: req.body.stock_id,
+    stockId: req.body.stock_id,
   };
 
   StockDetail.findByIdAndUpdate(
     req.params.id,
-    { $set: StockDetail },
+    { $set: stockDetail },
     { new: true },
     (err, docs) => {
       //new parameter declares we need the updated docs returned ie new
