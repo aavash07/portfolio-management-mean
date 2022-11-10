@@ -1,29 +1,34 @@
 <table class="table">
-    <thead >
-      <tr>
-        <th scope="col">S.N</th>
-        <th scope="col">Stock Name</th>
-        <th scope="col">Transaction Type</th>
-        <th scope="col">Quantity</th>
-        <th scope="col">Amount</th>
-        <th scope="col">Transaction Date</th>
-      </tr>
-    </thead>
-    <tbody>
-
-      <tr *ngFor="let sd of stockDetailsService.list,let i = index" >
-          <td >{{i+1}}</td>
-          <td >{{sd.stockName}}</td>
-          <td >{{sd.transactionType}}</td>
-          <td >{{sd.quantity}}</td>
-          <td >{{sd.amount}}</td>
-          <td >{{sd.transactionDate}}</td>
-          <td>
-              <em *ngIf="sd._id== stockDetailsService.list[stockDetailsService.list.length-1]._id" class="far fa-trash-alt fa-lg text-danger" (click)="onDelete(sd._id)"></em>
-          </td>
-          <td>
-            <em *ngIf="sd._id== stockDetailsService.list[stockDetailsService.list.length-1]._id" class="far fa-edit fa-lg text-danger" (click)="populateForm(sd._id)" ></em>
-          </td>
-      </tr>
-    </tbody>
-  </table>
+  <thead>
+    <tr>
+      <th scope="col">S.N</th>
+      <th scope="col">Stock Name</th>
+      <th scope="col">Transaction Type</th>
+      <th scope="col">Quantity</th>
+      <th scope="col">Amount</th>
+      <th scope="col">Transaction Date</th>
+    </tr>
+  </thead>
+  <tbody *ngIf="stockDetails.length">
+    <tr *ngFor="let stockDetail of stockDetails; let i = index">
+      <td>{{ i + 1 }}</td>
+      <td>{{ stockDetail.stock?.name }}</td>
+      <td>{{ stockDetail?.transactionType }}</td>
+      <td>{{ stockDetail?.quantity }}</td>
+      <td>{{ stockDetail?.amount }}</td>
+      <td>{{ stockDetail?.transactionDate }}</td>
+      <td>
+        <em
+          class="far fa-trash-alt fa-lg text-danger"
+          (click)="onDelete(stockDetail._id)"
+        ></em>
+      </td>
+      <td>
+        <em
+          class="far fa-edit fa-lg text-danger"
+          (click)="editStockDetails(stockDetail._id)"
+        ></em>
+      </td>
+    </tr>
+  </tbody>
+</table>

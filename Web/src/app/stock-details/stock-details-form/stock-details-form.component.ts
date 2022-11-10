@@ -1,62 +1,128 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
-import { Router } from '@angular/router';
+import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { plainToClass } from 'class-transformer';
 import { ToastrService } from 'ngx-toastr';
-import { StockDetails } from 'src/app/Shared/stock-details.model';
+import { takeUntil } from 'rxjs/operators';
+import { StockDetail } from 'src/app/Shared/models/stock-detail.model';
+import { Stock } from 'src/app/Shared/models/stock.model';
 import { StockDetailsService } from 'src/app/Shared/stock-details.service';
 import { StocksService } from 'src/app/Shared/stocks.service';
+import { subscribedContainerMixin } from 'src/app/Shared/subscribedContainer.mixin';
 
 @Component({
   selector: 'app-stock-details-form',
   templateUrl: './stock-details-form.component.html',
 })
-export class StockDetailsFormComponent implements OnInit {
+export class StockDetailsFormComponent
+  extends subscribedContainerMixin()
+  implements OnInit
+{
+  public stocks: Stock[] = [];
+  public stockDetail: StockDetail = new StockDetail();
+  stockDetailsForm: FormGroup;
 
-  constructor(public service:StockDetailsService,private toastr:ToastrService,private datePipe:DatePipe,private router:Router,public stockServices:StocksService) { }
+  constructor(
+    public stockDetailsService: StockDetailsService,
+    private toastr: ToastrService,
+    private datePipe: DatePipe,
+    private router: Router,
+    public stockServices: StocksService,
+    private route: ActivatedRoute,
+    private formBuilder: FormBuilder
+  ) {
+    super();
+    this.stockDetailsForm = this.formBuilder.group({
+      transactionType: ['', Validators.required],
+      quantity: ['', Validators.required],
+      amount: ['', Validators.required],
+      transactionDate: ['', Validators.required],
+      stockId: ['', Validators.required],
+    });
+  }
 
   ngOnInit(): void {
-    this.stockServices.getStocks();
+    this.getAllStocks();
+    const stockDetailId = this.route.snapshot.paramMap.get('id');
+    if (stockDetailId) {
+      this.stockDetailsService
+        .getStockDetailById(stockDetailId)
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe((res) => {
+          this.stockDetail = res;
+          this.populateForm();
+        });
+    }
   }
 
-  onSubmit(form:NgForm){
-    if(this.service.formData._id==0){
-      this.insertRecord(form);
-      this.router.navigate(['']);
-    }
-    else{
-      this.updateRecord(form);
-      this.router.navigate(['']);
-    }
-
+  getAllStocks(): void {
+    this.stockServices
+      .getAllStocks()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((res) => {
+        this.stocks = res;
+      });
   }
 
-  insertRecord(form:NgForm){
-    this.service.postStockDetails().subscribe(
-      res=>{
-          this.resetForm(form);
-          this.service.getAllStocks();
-          this.toastr.success('Submitted Successfully','Stock Detail register');
+  populateForm(): void {
+    this.stockDetailsForm.patchValue(this.stockDetail);
+    this.stockDetailsForm.patchValue({
+      transactionDate: this.datePipe.transform(
+        this.stockDetail.transactionDate,
+        'dd/MM/yyyy'
+      ),
+    });
+  }
+
+  submit() {
+    const stockDetailId = this.route.snapshot.paramMap.get('id');
+    if (this.stockDetailsForm.valid) {
+      const stockDetail = {
+        _id: this.stockDetail._id,
+        transactionType: this.stockDetailsForm.value.transactionType,
+        quantity: this.stockDetailsForm.value.quantity,
+        amount: this.stockDetailsForm.value.amount,
+        transactionDate: this.stockDetailsForm.value.transactionDate,
+        stockId: this.stockDetailsForm.value.stockId,
+      };
+      const mappedStockDetail = plainToClass(StockDetail, stockDetail);
+      if (stockDetailId) {
+        this.updateRecord(mappedStockDetail);
+        this.router.navigate(['']);
+      } else {
+        this.insertRecord(mappedStockDetail);
+        this.router.navigate(['']);
+      }
+    }
+  }
+
+  insertRecord(stockDetail: StockDetail) {
+    this.stockDetailsService.postStockDetails(stockDetail).subscribe(
+      (res) => {
+        this.stockDetailsForm.reset();
+        this.toastr.success('Submitted Successfully', 'Stock Detail register');
       },
-      err=>{console.log(err);}
+      (err) => {
+        console.log(err);
+      }
     );
   }
 
-  updateRecord(form:NgForm){
-    this.service.putStockDetails().subscribe(
-      res=>{
-          this.resetForm(form);
-          this.service.getAllStocks();
-          this.toastr.info('Updated Successfully','Stock Detail update');
+  updateRecord(stockDetail: StockDetail) {
+    this.stockDetailsService.putStockDetails(stockDetail).subscribe(
+      (res) => {
+        this.stockDetailsForm.reset();
+        this.toastr.info('Updated Successfully', 'Stock Detail update');
       },
-      err=>{console.log(err);}
+      (err) => {
+        console.log(err);
+      }
     );
   }
 
-  resetForm(form:NgForm){
+  resetForm(form: NgForm) {
     form.form.reset();
-    this.service.formData= new StockDetails();
+    this.stockDetailsService.formData = new StockDetail();
   }
-
-
 }

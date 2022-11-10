@@ -1,10 +1,11 @@
 import { Stock } from "./stock.model";
 
-export class StockDetails {
-  _id?: number;
+export class StockDetail {
+  _id: string;
   transactionType?: string;
   quantity?: number;
   amount?: number;
   transactionDate?: string;
+  stockId?: string;
   stock?: Stock;
 }

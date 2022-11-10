@@ -1,45 +1,63 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { StockDetails } from '../Shared/stock-details.model';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { StockDetail } from '../Shared/models/stock-detail.model';
 import { StockDetailsService } from '../Shared/stock-details.service';
+import { subscribedContainerMixin } from '../Shared/subscribedContainer.mixin';
 
 @Component({
   selector: 'app-stock-details',
   templateUrl: './stock-details.component.html',
 })
-export class StockDetailsComponent implements OnInit {
+export class StockDetailsComponent
+  extends subscribedContainerMixin()
+  implements OnInit
+{
+  public stockDetails: StockDetail[] = [];
 
-  constructor(public stockDetailsService:StockDetailsService,private toastr:ToastrService,private router:Router) { }
+  constructor(
+    public stockDetailsService: StockDetailsService,
+    private toastr: ToastrService,
+    private router: Router
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
-    this.stockDetailsService.getAllStocks();
+    this.fetchAllStockDetails();
   }
 
-  populateForm(id:number){
-    this.stockDetailsService.getById(id);
-    var stockDetail= new StockDetails;
-    stockDetail._id=id;
-    stockDetail.transactionType=this.stockDetailsService.stockById.transactionType;
-    stockDetail.quantity=this.stockDetailsService.stockById.quantity;
-    stockDetail.amount=this.stockDetailsService.stockById.amount;
-    stockDetail.transactionDate=this.stockDetailsService.stockById.transactionDate;
-    this.stockDetailsService.formData = stockDetail;
-    this.router.navigate(['add']);
+  private fetchAllStockDetails(): void {
+    this.stockDetailsService
+      .getAllStockDetails()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((res) => {
+        if (res) {
+          this.stockDetails = res;
+        }
+      });
   }
 
-  onDelete(id:number){
-    if(confirm('Are you sure to delete this record?'))
-    {
-    this.stockDetailsService.deleteStock(id)
-    .subscribe(
-      res=>{
-        this.stockDetailsService.getAllStocks();
-        this.toastr.error("Deleted Successfully",'Stock Detail Registration');
-      },
-      err=>{console.log(err)}
-    )
+  public editStockDetails(id: string): void {
+    this.router.navigate(['add',id]);
+  }
+
+  public onDelete(id: string): void {
+    if (confirm('Are you sure to delete this record?')) {
+      this.stockDetailsService.deleteStock(id).subscribe(
+        (res) => {
+          this.fetchAllStockDetails();
+          this.toastr.error(
+            'Deleted Successfully',
+            'Stock Detail Registration'
+          );
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
     }
   }
-
 }

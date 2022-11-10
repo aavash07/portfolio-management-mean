@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { StockDetails } from './stock-details.model';
-import { StockDetailsView } from './stock-details-view.model';
-import { StockProfit } from './stock-profit.model';
-import { SingleStockProfit } from './single-stock-profit.model';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { StockDetailsView } from './models/stock-details-view.model';
 import { environment } from 'src/environments/environment';
+import { Observable } from 'rxjs';
+import { SingleStockProfit } from './models/single-stock-profit.model';
+import { StockDetail } from './models/stock-detail.model';
+import { StockProfit } from './models/stock-profit.model';
 
 @Injectable({
   providedIn: 'root',
@@ -12,36 +13,43 @@ import { environment } from 'src/environments/environment';
 export class StockDetailsService {
   constructor(private http: HttpClient) {}
 
-  formData: StockDetails = new StockDetails();
+  formData: StockDetail = new StockDetail();
 
   public list: StockDetailsView[];
 
-  readonly stockDetailsUrl = environment.apiURL + '/stocks-details';
+  readonly stockDetailsUrl = environment.apiURL + '/stock_details';
 
-  postStockDetails() {
-    return this.http.post(this.stockDetailsUrl, this.formData);
+  public getAllStockDetails(): Observable<StockDetail[]> {
+    return this.http.get<StockDetail[]>(`${this.stockDetailsUrl}`);
   }
 
-  putStockDetails() {
-    return this.http.put(
-      `${this.stockDetailsUrl}/${this.formData._id}`,
-      this.formData
-    );
+  public getStockDetailById(id: string): Observable<StockDetail> {
+    return this.http.get<StockDetail>(`${this.stockDetailsUrl}/${id}`);
   }
 
-  deleteStock(id: number) {
+  public postStockDetails(stockDetail: StockDetail): Observable<StockDetail> {
+    return this.http.post<any>(this.stockDetailsUrl, { stockDetail });
+  }
+
+  public putStockDetails(stockDetail: StockDetail) {
+    return this.http.put(`${this.stockDetailsUrl}/${stockDetail._id}`, {
+      stockDetail,
+    });
+  }
+  
+  public deleteStock(id: string) {
     return this.http.delete(`${this.stockDetailsUrl}/${id}`);
   }
 
   stockById: StockDetailsView;
-  getById(id: number) {
+  getById(id: string) {
     this.http
       .get(`${this.stockDetailsUrl}/${id}`)
       .toPromise()
       .then((res) => (this.stockById = res as StockDetailsView));
   }
 
-  getAllStocks() {
+  getAllStockDetailss() {
     this.http
       .get(this.stockDetailsUrl)
       .toPromise()

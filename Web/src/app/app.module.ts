@@ -9,7 +9,7 @@ import { StockDetailsComponent } from './stock-details/stock-details.component';
 import { StockDetailsFormComponent } from './stock-details/stock-details-form/stock-details-form.component';
 import { StockProfitComponent } from './stock-details/stock-profit/stock-profit.component';
 import { StockProfitSingleComponent } from './stock-details/stock-profit-single/stock-profit-single.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RoutingModule } from './routing.module';
 import { CommonModule} from '@angular/common';
@@ -38,6 +38,7 @@ import {DatePipe} from '@angular/common';
     CommonModule,
     MatTabsModule,
     MatSidenavModule,
+    ReactiveFormsModule,
 
   ],
   exports:[
@@ -45,6 +46,6 @@ import {DatePipe} from '@angular/common';
   ],
   providers: [DatePipe],
   bootstrap: [AppComponent],
-  
+
 })
 export class AppModule { }
