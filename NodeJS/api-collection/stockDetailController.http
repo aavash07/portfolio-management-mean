@@ -1,8 +1,13 @@
 @url = http://localhost:3000
 
+@id = 636f8a01f291c50b089b81e9
 ####
 # @name all_stocks_details
 GET {{url}}/stock_details
+
+####
+# @name stocks_details_by_id
+GET {{url}}/stock_details/{{id}}
 
 ####
 # @name all_stocks_details
@@ -10,14 +15,22 @@ POST {{url}}/stock_details
 Content-Type: application/json
 
 {
-    "amount": "500",
+    "amount": "300",
     "quantity": 10,
     "stockId": "6368079143363b6755aff0c3",
     "transactionDate": "2022-11-11",
-    "transactionType": "buy"
+    "transactionType": "sell"
 }
 
 ###
 
 # @name delete_stock_detail
-DELETE  {{url}}/stock_details/636d51c3caf2ba8a27ff5434
+DELETE  {{url}}/stock_details/{{id}}
+
+###
+# @name get_profit
+GET {{url}}/stock_details/profit
+
+###
+# @name get_stock_profit
+GET {{url}}/stock_details/stock_profit/6368079143363b6755aff0c3
