@@ -1,35 +1,76 @@
 const express = require('express');
+const stockDetail = require('../models/stock-detail');
 var router = express.Router();
 var ObjectId = require('mongoose').Types.ObjectId;
 
 var { StockDetail } = require('../models/stock-detail');
+var { Stock } = require('../models/stock');
 
 // localhost:3000/stocks/
-router.get('/', (req, res) => {
-  StockDetail.find((err, docs) => {
-    if (!err) {
-      res.send(docs);
+router.get('/', async (req, res) => {
+  const stockDeatils = await StockDetail.find().populate('stock');
+  if (!stockDeatils.length)
+    return res.status(403).json({ message: 'No data in dataBase' });
+
+  return res.status(200).json({ message: 'Success', data: stockDeatils });
+});
+
+router.get('/profit', async (req, res) => {
+  totalUnits = 0;
+  totalInvestment = 0;
+  soldAmount = 0;
+  currentAmount = 0;
+  profit = 0;
+
+  boughtUnits = 0;
+  soldUnits = 0;
+  const stockDetails = await StockDetail.find().populate('stock');
+  if (!stockDetails.length)
+    return res.status(403).json({ message: 'No data in dataBase' });
+
+  for (const stockDetail of stockDetails) {
+    if (stockDetail.transactionType == 'buy') {
+      totalInvestment += stockDetail.amount * stockDetail.quantity;
+      boughtUnits += stockDetail.quantity;
     } else {
-      console.log(
-        'Error in retriving stock details: ' + JSON.stringify(err, undefined, 2)
-      );
+      soldAmount += stockDetail.amount * stockDetail.quantity;
+      soldUnits += stockDetail.quantity;
     }
+    totalUnits += stockDetail.quantity;
+  }
+
+  currentAmount =
+    (boughtUnits - soldUnits) * stockDetails[stockDetails.length - 1].amount;
+  profit = soldAmount - totalInvestment;
+  return res.status(200).json({
+    message: 'Success',
+    data: {
+      totalUnits: totalUnits,
+      totalInvestment: totalInvestment,
+      soldAmount: soldAmount,
+      currentAmount: currentAmount,
+      profit: profit,
+    },
   });
 });
 
-router.get('/:id', (req, res) => {
+router.get('/stock_profit/:stockId',(req, res) => {
+  stockDeatils = StockDetail.find({"stock": ObjectId(`${req.params.stockId}`)});
+  return res.status(200).json({data: stockDeatils});
+})
+
+router.get('/:id', async (req, res) => {
   if (!ObjectId.isValid(req.params.id))
     return res.status(400).send('No record with id ' + req.params.id);
 
-  StockDetail.findById(req.params.id, (err, docs) => {
-    if (!err) {
-      res.send(docs);
-    } else {
-      console.log(
-        'Error in getting stock details: ' + JSON.stringify(err, undefined, 2)
-      );
-    }
-  });
+  const stockDetail = await StockDetail.findById(req.params.id).populate(
+    'stock'
+  );
+  if (!stockDetail) {
+    return res.status(403).json({ message: 'No data in dataBase' });
+  }
+
+  return res.status(200).json({ message: 'Success', data: stockDetail });
 });
 
 router.post('/', (req, res) => {
@@ -38,7 +79,7 @@ router.post('/', (req, res) => {
     quantity: req.body.quantity,
     amount: req.body.amount,
     transactionDate: req.body.transactionDate,
-    stockId: req.body.stockId,
+    stock: req.body.stockId,
   });
   stockDetail.save((err, docs) => {
     if (!err) {
@@ -60,7 +101,7 @@ router.put('/:id', (req, res) => {
     quantity: req.body.quantity,
     amount: req.body.quantity,
     transactionDate: req.body.quantity,
-    stockId: req.body.stock_id,
+    stock: req.body.stockId,
   };
 
   StockDetail.findByIdAndUpdate(

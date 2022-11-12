@@ -6,7 +6,7 @@ var StockDetail = mongoose.model('StockDetail', {
   quantity: { type: Number },
   amount: { type: Number },
   transactionDate: { type: Date },
-  stockId: {
+  stock: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Stock',
     required: true,
