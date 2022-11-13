@@ -10,6 +10,7 @@ const routes: Routes=[
   {path:'home',component:StockDetailsComponent},
   {path: '',redirectTo:'/home',pathMatch:'full'},
   {path:'add',component:StockDetailsFormComponent},
+  {path:'edit/:id',component:StockDetailsFormComponent},
   {path:'profit', component:StockProfitComponent},
   {path:'single-profit',component:StockProfitSingleComponent}
 ]
