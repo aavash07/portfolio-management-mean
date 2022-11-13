@@ -33,4 +33,4 @@ GET {{url}}/stock_details/profit
 
 ###
 # @name get_stock_profit
-GET {{url}}/stock_details/stock_profit/6368079143363b6755aff0c3
+GET {{url}}/stock_details/stock_profit/

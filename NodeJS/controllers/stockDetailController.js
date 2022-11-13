@@ -21,7 +21,6 @@ router.get('/profit', async (req, res) => {
   soldAmount = 0;
   currentAmount = 0;
   profit = 0;
-
   boughtUnits = 0;
   soldUnits = 0;
   const stockDetails = await StockDetail.find().populate('stock');
@@ -54,10 +53,58 @@ router.get('/profit', async (req, res) => {
   });
 });
 
-router.get('/stock_profit/:stockId',(req, res) => {
-  stockDeatils = StockDetail.find({"stock": ObjectId(`${req.params.stockId}`)});
-  return res.status(200).json({data: stockDeatils});
-})
+router.get('/stock_profit', async (req, res) => {
+  const stocks = await Stock.find();
+  if (!stocks.length)
+    return res.status(403).json({ message: 'No data in dataBase' });
+
+  stockProfit = [];
+
+  for (const stock of stocks) {
+    totalUnits = 0;
+    totalInvestment = 0;
+    soldAmount = 0;
+    currentAmount = 0;
+    profit = 0;
+    boughtUnits = 0;
+    soldUnits = 0;
+    const stockDetails = await StockDetail.find().populate({
+      path: 'stock',
+      match: { id: `${stock._id}` },
+    });
+    console.log(stock._id);
+    if (!stockDetails.length)
+      return res.status(403).json({ message: 'No data in dataBase' });
+
+    for (const stockDetail of stockDetails) {
+      if (stockDetail.transactionType == 'buy') {
+        totalInvestment += stockDetail.amount * stockDetail.quantity;
+        boughtUnits += stockDetail.quantity;
+      } else {
+        soldAmount += stockDetail.amount * stockDetail.quantity;
+        soldUnits += stockDetail.quantity;
+      }
+      totalUnits += stockDetail.quantity;
+    }
+
+    currentAmount =
+      (boughtUnits - soldUnits) * stockDetails[stockDetails.length - 1].amount;
+    profit = soldAmount - totalInvestment;
+    stockProfit.push({
+      totalUnits: totalUnits,
+      totalInvestment: totalInvestment,
+      soldAmount: soldAmount,
+      currentAmount: currentAmount,
+      profit: profit,
+      stockName: stock.name,
+    });
+  }
+
+  return res.status(200).json({
+    message: 'Success',
+    data: stockProfit,
+  });
+});
 
 router.get('/:id', async (req, res) => {
   if (!ObjectId.isValid(req.params.id))
