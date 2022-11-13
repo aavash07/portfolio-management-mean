@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { SingleStockProfit } from './models/single-stock-profit.model';
 import { StockDetail } from './models/stock-detail.model';
 import { StockProfit } from './models/stock-profit.model';
+import { ApiResponse } from './models/api-response.model';
 
 @Injectable({
   providedIn: 'root',
@@ -19,8 +20,8 @@ export class StockDetailsService {
 
   readonly stockDetailsUrl = environment.apiURL + '/stock_details';
 
-  public getAllStockDetails(): Observable<StockDetail[]> {
-    return this.http.get<StockDetail[]>(`${this.stockDetailsUrl}`);
+  public getAllStockDetails(): Observable<ApiResponse<StockDetail[]>> {
+    return this.http.get<ApiResponse<StockDetail[]>>(`${this.stockDetailsUrl}`);
   }
 
   public getStockDetailById(id: string): Observable<StockDetail> {
@@ -36,44 +37,20 @@ export class StockDetailsService {
       stockDetail,
     });
   }
-  
+
   public deleteStock(id: string) {
     return this.http.delete(`${this.stockDetailsUrl}/${id}`);
   }
 
-  stockById: StockDetailsView;
-  getById(id: string) {
-    this.http
-      .get(`${this.stockDetailsUrl}/${id}`)
-      .toPromise()
-      .then((res) => (this.stockById = res as StockDetailsView));
+  public getProfit(): Observable<ApiResponse<StockProfit>> {
+    return this.http.get<ApiResponse<StockProfit>>(
+      `${this.stockDetailsUrl}/profit`
+    );
   }
 
-  getAllStockDetailss() {
-    this.http
-      .get(this.stockDetailsUrl)
-      .toPromise()
-      .then((res) => (this.list = res as StockDetailsView[]));
-  }
-
-  public profitView: StockProfit;
-  readonly profitUrl = 'https://localhost:44361/api/StockDetails/getprofit';
-
-  getProfit() {
-    this.http
-      .get(this.profitUrl)
-      .toPromise()
-      .then((res) => (this.profitView = res as StockProfit));
-  }
-
-  public singleProfitView: SingleStockProfit[];
-  readonly singleProfitUrl =
-    'https://localhost:44361/api/StockDetails/getprofitsingle';
-
-  getProfitSingle() {
-    this.http
-      .get(this.singleProfitUrl)
-      .toPromise()
-      .then((res) => (this.singleProfitView = res as SingleStockProfit[]));
+  public getStockProfit(): Observable<ApiResponse<StockProfit[]>> {
+    return this.http.get<ApiResponse<StockProfit[]>>(
+      `${this.stockDetailsUrl}/stock_profit`
+    );
   }
 }
