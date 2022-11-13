@@ -1,6 +1,6 @@
-<div  *ngIf="false">
+<div *ngIf="stockProfits">
 
-  <table *ngFor="let profits of service.singleProfitView">
+  <table *ngFor="let profits of stockProfits">
       <thead>
           <th scope="col">{{profits.stockName}}</th>
       </thead>

@@ -1,21 +1,33 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { Router } from '@angular/router';
+import { takeUntil } from 'rxjs/operators';
+import { StockProfit } from 'src/app/Shared/models/stock-profit.model';
 import { StockDetailsService } from 'src/app/Shared/stock-details.service';
+import { subscribedContainerMixin } from 'src/app/Shared/subscribedContainer.mixin';
 
 @Component({
   selector: 'app-stock-profit',
   templateUrl: './stock-profit.component.html',
 })
-export class StockProfitComponent implements OnInit {
+export class StockProfitComponent
+  extends subscribedContainerMixin()
+  implements OnInit
+{
+  constructor(
+    public stockDetailsService: StockDetailsService,
+  ) {
+    super();
+  }
 
-  constructor(public service:StockDetailsService,private router:Router,private http:HttpClient) { }
-
-  profit:string="Profit";
-
+  public stockProfit: StockProfit = new StockProfit();
 
   ngOnInit(): void {
-    this.service.getProfit();
+    this.stockDetailsService
+      .getProfit()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((res) => {
+        if (res && res.data) {
+          this.stockProfit = res.data;
+        }
+      });
   }
 }

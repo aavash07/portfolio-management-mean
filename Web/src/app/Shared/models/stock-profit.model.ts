@@ -6,5 +6,5 @@ export class StockProfit {
   soldAmount?: number;
   currentAmount?: number;
   profit?: number;
-  stock?: Stock;
+  stockName?: string;
 }

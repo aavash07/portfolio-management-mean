@@ -22,6 +22,7 @@ export class StockDetailsFormComponent
   public stocks: Stock[] = [];
   public stockDetail: StockDetail = new StockDetail();
   stockDetailsForm: FormGroup;
+  public isLoading: boolean = false;
 
   constructor(
     public stockDetailsService: StockDetailsService,
@@ -46,12 +47,14 @@ export class StockDetailsFormComponent
     this.getAllStocks();
     const stockDetailId = this.route.snapshot.paramMap.get('id');
     if (stockDetailId) {
+      this.isLoading = true;
       this.stockDetailsService
         .getStockDetailById(stockDetailId)
         .pipe(takeUntil(this.destroyed$))
         .subscribe((res) => {
           this.stockDetail = res;
           this.populateForm();
+          this.isLoading = false;
         });
     }
   }

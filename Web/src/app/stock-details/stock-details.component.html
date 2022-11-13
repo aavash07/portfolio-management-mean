@@ -16,7 +16,7 @@
       <td>{{ stockDetail?.transactionType }}</td>
       <td>{{ stockDetail?.quantity }}</td>
       <td>{{ stockDetail?.amount }}</td>
-      <td>{{ stockDetail?.transactionDate }}</td>
+      <td>{{ stockDetail?.transactionDate | date: "dd MMMM yyyy" }}</td>
       <td>
         <em
           class="far fa-trash-alt fa-lg text-danger"

@@ -34,14 +34,14 @@ export class StockDetailsComponent
       .getAllStockDetails()
       .pipe(takeUntil(this.destroyed$))
       .subscribe((res) => {
-        if (res) {
-          this.stockDetails = res;
+        if (res && res.data) {
+          this.stockDetails = res.data;
         }
       });
   }
 
   public editStockDetails(id: string): void {
-    this.router.navigate(['add',id]);
+    this.router.navigate(['edit',id]);
   }
 
   public onDelete(id: string): void {
