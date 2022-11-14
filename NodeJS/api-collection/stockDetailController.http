@@ -10,16 +10,16 @@ GET {{url}}/stock_details
 GET {{url}}/stock_details/{{id}}
 
 ####
-# @name all_stocks_details
+# @name add_stocks_details
 POST {{url}}/stock_details
 Content-Type: application/json
 
 {
     "amount": "300",
     "quantity": 10,
-    "stockId": "6368079143363b6755aff0c3",
+    "stockId": "6371ff335a667020c2f77fc0",
     "transactionDate": "2022-11-11",
-    "transactionType": "sell"
+    "transactionType": "buy"
 }
 
 ###

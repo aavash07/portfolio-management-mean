@@ -3,3 +3,12 @@
 ####
 # @name all_stocks
 GET {{url}}/stocks
+
+####
+# @name add_stocks
+POST {{url}}/stocks
+Content-Type: application/json
+
+{
+    "name": "NIFRA"
+}
