@@ -45,18 +45,18 @@ export class StockDetailsFormComponent
 
   ngOnInit(): void {
     this.getAllStocks();
-    const stockDetailId = this.route.snapshot.paramMap.get('id');
-    if (stockDetailId) {
-      this.isLoading = true;
-      this.stockDetailsService
-        .getStockDetailById(stockDetailId)
-        .pipe(takeUntil(this.destroyed$))
-        .subscribe((res) => {
-          this.stockDetail = res;
-          this.populateForm();
-          this.isLoading = false;
-        });
-    }
+  }
+
+  getStockDetailById(stockDetailId: string) {
+    this.isLoading = true;
+    this.stockDetailsService
+      .getStockDetailById(stockDetailId)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((res) => {
+        this.stockDetail = res.data;
+        this.populateForm();
+        this.isLoading = false;
+      });
   }
 
   getAllStocks(): void {
@@ -65,6 +65,10 @@ export class StockDetailsFormComponent
       .pipe(takeUntil(this.destroyed$))
       .subscribe((res) => {
         this.stocks = res;
+        const stockDetailId = this.route.snapshot.paramMap.get('id');
+        if (stockDetailId) {
+          this.getStockDetailById(stockDetailId);
+        }
       });
   }
 
@@ -75,6 +79,9 @@ export class StockDetailsFormComponent
         this.stockDetail.transactionDate,
         'dd/MM/yyyy'
       ),
+    });
+    this.stockDetailsForm.patchValue({
+      stockId: this.stockDetail.stock._id,
     });
   }
 

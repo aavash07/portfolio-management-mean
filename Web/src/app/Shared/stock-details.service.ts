@@ -24,8 +24,8 @@ export class StockDetailsService {
     return this.http.get<ApiResponse<StockDetail[]>>(`${this.stockDetailsUrl}`);
   }
 
-  public getStockDetailById(id: string): Observable<StockDetail> {
-    return this.http.get<StockDetail>(`${this.stockDetailsUrl}/${id}`);
+  public getStockDetailById(id: string): Observable<ApiResponse<StockDetail>> {
+    return this.http.get<ApiResponse<StockDetail>>(`${this.stockDetailsUrl}/${id}`);
   }
 
   public postStockDetails(stockDetail: StockDetail): Observable<StockDetail> {
