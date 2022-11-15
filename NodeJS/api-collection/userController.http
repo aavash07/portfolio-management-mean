@@ -23,7 +23,7 @@ Content-type: application/json
 }
 ###
 
-@access-token = {{login.response.headers.access-token}}
+@access-token = {{login.response.body.data.token}}
 @uid = {{login.response.headers.uid}}
 
 ###

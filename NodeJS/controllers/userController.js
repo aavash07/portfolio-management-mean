@@ -1,17 +1,17 @@
 require('dotenv').config();
 const express = require('express');
-var router = express.Router();
+let router = express.Router();
 const jwt = require('jsonwebtoken');
 const auth = require('../middleware/auth');
 const bcrypt = require('bcryptjs');
 
-var { User } = require('../models/user');
+let { User } = require('../models/user');
 
 router.post('/register', async (req, res) => {
   // Our register logic starts here
   try {
     // Get user input
-    const { name, email, password } = req.body;
+    const { name, email, password } = req.body.user;
 
     // Validate user input
     if (!(email && password && name)) {
@@ -48,7 +48,7 @@ router.post('/register', async (req, res) => {
     user.token = token;
 
     // return new user
-    res.status(201).json(user);
+    res.status(201).json({data: user});
   } catch (err) {
     console.log(err);
   }
@@ -59,7 +59,7 @@ router.post('/login', async (req, res) => {
   // Our login logic starts here
   try {
     // Get user input
-    const { email, password } = req.body;
+    const { email, password } = req.body.user;
 
     // Validate user input
     if (!(email && password)) {

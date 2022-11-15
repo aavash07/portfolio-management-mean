@@ -5,10 +5,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 
 import { AppComponent } from './app.component';
-import { StockDetailsComponent } from './stock-details/stock-details.component';
-import { StockDetailsFormComponent } from './stock-details/stock-details-form/stock-details-form.component';
-import { StockProfitComponent } from './stock-details/stock-profit/stock-profit.component';
-import { StockProfitSingleComponent } from './stock-details/stock-profit-single/stock-profit-single.component';
+import { StockDetailsComponent } from './components/stock-details/stock-details.component';
+import { StockDetailsFormComponent } from './components/stock-details-form/stock-details-form.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RoutingModule } from './routing.module';
@@ -16,7 +14,11 @@ import { CommonModule} from '@angular/common';
 import { MatTabsModule} from '@angular/material/tabs';
 import { MatSidenavModule} from '@angular/material/sidenav';
 import {DatePipe} from '@angular/common';
-
+import { LoginComponent } from './components/login/login.component';
+import { AuthGuard } from './auth/guards/auth-guard';
+import { StockProfitSingleComponent } from './components/stock-profit-single/stock-profit-single.component';
+import { StockProfitComponent } from './components/stock-profit/stock-profit.component';
+import { RegisterComponent } from './components/register/register.component';
 
 
 @NgModule({
@@ -26,6 +28,8 @@ import {DatePipe} from '@angular/common';
     StockDetailsFormComponent,
     StockProfitComponent,
     StockProfitSingleComponent,
+    LoginComponent,
+    RegisterComponent,
 
   ],
   imports: [
@@ -44,7 +48,7 @@ import {DatePipe} from '@angular/common';
   exports:[
     MatSidenavModule
   ],
-  providers: [DatePipe],
+  providers: [DatePipe, AuthGuard],
   bootstrap: [AppComponent],
 
 })

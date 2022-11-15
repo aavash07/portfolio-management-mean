@@ -21,6 +21,8 @@
     "@angular/platform-browser": "~11.2.3",
     "@angular/platform-browser-dynamic": "~11.2.3",
     "@angular/router": "~11.2.3",
+    "@auth0/angular-jwt": "^5.1.0",
+    "angular-token": "^7.0.1",
     "bootstrap": "^4.6.0",
     "class-transformer": "^0.5.1",
     "ngx-toastr": "^13.2.0",

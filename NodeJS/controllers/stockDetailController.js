@@ -72,7 +72,6 @@ router.get('/stock_profit', async (req, res) => {
       path: 'stock',
       match: { id: `${stock._id}` },
     });
-    console.log(stock._id);
     if (!stockDetails.length)
       return res.status(403).json({ message: 'No data in dataBase' });
 
