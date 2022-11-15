@@ -71,7 +71,7 @@ router.post('/login', async (req, res) => {
     if (user && (await bcrypt.compare(password, user.password))) {
       // Create token
       const token = jwt.sign(
-        { user_id: user._id, email },
+        { user_id: user._id, email: email },
         process.env.ACCESS_TOKEN_SECRET,
         {
           expiresIn: '2h',
@@ -81,12 +81,10 @@ router.post('/login', async (req, res) => {
       // save user token
       user.token = token;
 
-      //set token to headers
-      res.set('access-token', token);
-      res.set('uid', token);
-
       // user
-      res.status(200).json(user);
+      res
+        .status(200)
+        .json({ message: 'success', data: { user: user, token: token } });
     } else {
       res.status(400).send('Invalid Credentials');
     }
@@ -99,7 +97,5 @@ router.post('/login', async (req, res) => {
 router.get('/welcome', auth, (req, res) => {
   res.status(200).send('Welcome 🙌 ');
 });
-
-
 
 module.exports = router;
