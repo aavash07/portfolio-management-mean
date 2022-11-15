@@ -10,36 +10,47 @@ import { subscribedContainerMixin } from 'src/app/Shared/subscribedContainer.mix
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent extends subscribedContainerMixin() implements OnInit {
-
+export class LoginComponent
+  extends subscribedContainerMixin()
+  implements OnInit
+{
   public loginForm: FormGroup;
 
-  constructor(private authService: AuthService,private formBuilder: FormBuilder,private router: Router) {
+  constructor(
+    private authService: AuthService,
+    private formBuilder: FormBuilder,
+    private router: Router,
+  ) {
     super();
     this.loginForm = this.formBuilder.group({
-      email: ['', Validators.required, Validators.email],
-      password: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required]],
     });
   }
 
   ngOnInit(): void {
-  }
-
-  login(): void {
-    if (this.loginForm.valid){
-      const user = {
-        email: this.loginForm.value.email,
-        password: this.loginForm.value.password
-      }
-      const mapperUser = plainToClass(User,user);
-      this.authService.login(user).pipe(takeUntil(this.destroyed$))
-      .subscribe((res)=>{
-        this.router.navigate(['home']);
-      })
+    if (this.authService.isLoggedIn()){
+      this.router.navigate(['/']);
     }
   }
 
-
+  login(): void {
+    if (this.loginForm.valid) {
+      const user = {
+        email: this.loginForm.value.email,
+        password: this.loginForm.value.password,
+      };
+      const mapperUser = plainToClass(User, user);
+      this.authService
+        .login(mapperUser)
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe((res) => {
+          if (res && res.data.token) {
+            this.router.navigate(['home']);
+          }
+        });
+    }
+  }
 }
