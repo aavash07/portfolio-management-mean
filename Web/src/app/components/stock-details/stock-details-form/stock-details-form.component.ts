@@ -130,9 +130,4 @@ export class StockDetailsFormComponent
       }
     );
   }
-
-  resetForm(form: NgForm) {
-    form.form.reset();
-    this.stockDetailsService.formData = new StockDetail();
-  }
 }

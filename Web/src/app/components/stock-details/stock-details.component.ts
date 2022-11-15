@@ -3,9 +3,9 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { StockDetail } from '../Shared/models/stock-detail.model';
-import { StockDetailsService } from '../Shared/stock-details.service';
-import { subscribedContainerMixin } from '../Shared/subscribedContainer.mixin';
+import { StockDetail } from '../../Shared/models/stock-detail.model';
+import { StockDetailsService } from '../../Shared/stock-details.service';
+import { subscribedContainerMixin } from '../../Shared/subscribedContainer.mixin';
 
 @Component({
   selector: 'app-stock-details',

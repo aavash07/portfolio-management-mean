@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { StockDetailsView } from './models/stock-details-view.model';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
-import { SingleStockProfit } from './models/single-stock-profit.model';
 import { StockDetail } from './models/stock-detail.model';
 import { StockProfit } from './models/stock-profit.model';
 import { ApiResponse } from './models/api-response.model';
@@ -13,10 +11,6 @@ import { ApiResponse } from './models/api-response.model';
 })
 export class StockDetailsService {
   constructor(private http: HttpClient) {}
-
-  formData: StockDetail = new StockDetail();
-
-  public list: StockDetailsView[];
 
   readonly stockDetailsUrl = environment.apiURL + '/stock_details';
 
