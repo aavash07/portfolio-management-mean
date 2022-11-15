@@ -5,25 +5,19 @@ import { ApiResponse } from 'src/app/Shared/models/api-response.model';
 import { Observable } from 'rxjs';
 import { User } from 'src/app/Shared/models/user.model';
 import { ToastrService } from 'ngx-toastr';
-import { JwtHelperService } from '@auth0/angular-jwt';
 import { tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  baseUrl = environment.apiURL;
-  invitationUrl = environment.apiURL + '/invitations/accept';
+  baseUrl = `${environment.apiURL}/users`;
 
-  constructor(
-    private http: HttpClient,
-    private toastrService: ToastrService,
-    private jwtHelperService: JwtHelperService
-  ) {}
+  constructor(private http: HttpClient, private toastrService: ToastrService) {}
 
   login(user: User): Observable<ApiResponse<any>> {
     return this.http
-      .post<ApiResponse<any>>(this.baseUrl + '/auth/login', { user })
+      .post<ApiResponse<any>>(this.baseUrl + '/login', { user })
       .pipe(
         tap((res: ApiResponse<any>) =>
           localStorage.setItem('access_token', res.data.token)
@@ -34,8 +28,7 @@ export class AuthService {
       );
   }
 
-  getLoggedInUser() {
-    const decodedToken = this.jwtHelperService.decodeToken();
-    return decodedToken.user;
+  public isLoggedIn(): boolean {
+    return !!localStorage.getItem('access_token');
   }
 }
