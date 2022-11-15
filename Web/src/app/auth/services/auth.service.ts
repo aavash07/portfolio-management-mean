@@ -28,6 +28,12 @@ export class AuthService {
       );
   }
 
+  register(user: User): Observable<ApiResponse<any>> {
+    return this.http.post<ApiResponse<any>>(this.baseUrl + '/register', {
+      user,
+    });
+  }
+
   public isLoggedIn(): boolean {
     return !!localStorage.getItem('access_token');
   }

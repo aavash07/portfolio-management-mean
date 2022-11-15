@@ -14,6 +14,7 @@ import { subscribedContainerMixin } from 'src/app/Shared/subscribedContainer.mix
 @Component({
   selector: 'app-stock-details-form',
   templateUrl: './stock-details-form.component.html',
+  styleUrls: ['./stock-details-form.component.scss']
 })
 export class StockDetailsFormComponent
   extends subscribedContainerMixin()

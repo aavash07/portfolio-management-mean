@@ -7,6 +7,7 @@ import { AuthGuard } from './auth/guards/auth-guard';
 import { StockProfitSingleComponent } from './components/stock-profit-single/stock-profit-single.component';
 import { StockProfitComponent } from './components/stock-profit/stock-profit.component';
 import { LoginComponent } from './components/login/login.component';
+import { RegisterComponent } from './components/register/register.component';
 
 const routes: Routes = [
   {
@@ -22,6 +23,7 @@ const routes: Routes = [
     ],
   },
   { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
 ];
 
 @NgModule({

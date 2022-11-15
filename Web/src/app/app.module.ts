@@ -18,6 +18,7 @@ import { LoginComponent } from './components/login/login.component';
 import { AuthGuard } from './auth/guards/auth-guard';
 import { StockProfitSingleComponent } from './components/stock-profit-single/stock-profit-single.component';
 import { StockProfitComponent } from './components/stock-profit/stock-profit.component';
+import { RegisterComponent } from './components/register/register.component';
 
 
 @NgModule({
@@ -28,6 +29,7 @@ import { StockProfitComponent } from './components/stock-profit/stock-profit.com
     StockProfitComponent,
     StockProfitSingleComponent,
     LoginComponent,
+    RegisterComponent,
 
   ],
   imports: [

@@ -7,6 +7,7 @@ import { subscribedContainerMixin } from 'src/app/Shared/subscribedContainer.mix
 @Component({
   selector: 'app-stock-profit',
   templateUrl: './stock-profit.component.html',
+  styleUrls: ['./stock-profit.component.scss']
 })
 export class StockProfitComponent
   extends subscribedContainerMixin()
