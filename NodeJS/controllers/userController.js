@@ -48,7 +48,7 @@ router.post('/register', async (req, res) => {
     user.token = token;
 
     // return new user
-    res.status(201).json(user);
+    res.status(201).json({data: user});
   } catch (err) {
     console.log(err);
   }
