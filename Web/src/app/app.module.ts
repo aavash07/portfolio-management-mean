@@ -6,9 +6,7 @@ import { ToastrModule } from 'ngx-toastr';
 
 import { AppComponent } from './app.component';
 import { StockDetailsComponent } from './components/stock-details/stock-details.component';
-import { StockDetailsFormComponent } from './components/stock-details/stock-details-form/stock-details-form.component';
-import { StockProfitComponent } from './components/stock-details/stock-profit/stock-profit.component';
-import { StockProfitSingleComponent } from './components/stock-details/stock-profit-single/stock-profit-single.component';
+import { StockDetailsFormComponent } from './components/stock-details-form/stock-details-form.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RoutingModule } from './routing.module';
@@ -17,12 +15,10 @@ import { MatTabsModule} from '@angular/material/tabs';
 import { MatSidenavModule} from '@angular/material/sidenav';
 import {DatePipe} from '@angular/common';
 import { LoginComponent } from './components/login/login.component';
-import { JwtModule } from '@auth0/angular-jwt';
 import { AuthGuard } from './auth/guards/auth-guard';
+import { StockProfitSingleComponent } from './components/stock-profit-single/stock-profit-single.component';
+import { StockProfitComponent } from './components/stock-profit/stock-profit.component';
 
-export function tokenGetter() {
-  return localStorage.getItem("access_token");
-}
 
 @NgModule({
   declarations: [
@@ -45,12 +41,7 @@ export function tokenGetter() {
     MatTabsModule,
     MatSidenavModule,
     ReactiveFormsModule,
-    JwtModule.forRoot({
-      config: {
-        tokenGetter: tokenGetter,
-        allowedDomains: ['localhost:3000']
-      }
-    })
+
   ],
   exports:[
     MatSidenavModule
