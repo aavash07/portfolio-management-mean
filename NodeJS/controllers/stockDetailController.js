@@ -121,32 +121,32 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
   let buyStockDetails = await StockDetail.find(
-    { stock: req.body.stockId, transactionType: 'buy' },
+    { stock: req.body.stockDetail.stockId, transactionType: 'buy' },
     { quantity: 1, _id: 0 }
   );
   buyStockDetails = buyStockDetails
     .map((a) => a.quantity)
     .reduce((a, b) => a + b, 0);
   let sellStockDetails = await StockDetail.find(
-    { stock: req.body.stockId, transactionType: 'sell' },
+    { stock: req.body.stockDetail.stockId, transactionType: 'sell' },
     { quantity: 1, _id: 0 }
   );
   sellStockDetails = sellStockDetails
     .map((a) => a.quantity)
     .reduce((a, b) => a + b, 0);
-  if (req.body.transactionType == 'sell') {
-    sellStockDetails += req.body.quantity;
+  if (req.body.stockDetail.transactionType == 'sell') {
+    sellStockDetails += req.body.stockDetail.quantity;
     if (sellStockDetails > buyStockDetails)
       return res
         .status(400)
         .send({ message: 'Cannot Sell Stock More than existing quantity' });
   }
   var stockDetail = new StockDetail({
-    transactionType: req.body.transactionType,
-    quantity: req.body.quantity,
-    amount: req.body.amount,
-    transactionDate: req.body.transactionDate,
-    stock: req.body.stockId,
+    transactionType: req.body.stockDetail.transactionType,
+    quantity: req.body.stockDetail.quantity,
+    amount: req.body.stockDetail.amount,
+    transactionDate: req.body.stockDetail.transactionDate,
+    stock: req.body.stockDetail.stockId,
   });
   stockDetail.save((err, docs) => {
     if (!err) {
@@ -164,11 +164,11 @@ router.put('/:id', (req, res) => {
     return res.status(400).send('No record with id ' + req.params.id);
 
   var stockDetail = {
-    transactionType: req.body.transactionType,
-    quantity: req.body.quantity,
-    amount: req.body.quantity,
-    transactionDate: req.body.quantity,
-    stock: req.body.stockId,
+    transactionType: req.body.stockDetail.transactionType,
+    quantity: req.body.stockDetail.quantity,
+    amount: req.body.stockDetail.amount,
+    transactionDate: req.body.stockDetail.transactionDate,
+    stock: req.body.stockDetail.stockId,
   };
 
   StockDetail.findByIdAndUpdate(
