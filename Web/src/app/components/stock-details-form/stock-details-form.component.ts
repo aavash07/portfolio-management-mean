@@ -115,7 +115,7 @@ export class StockDetailsFormComponent
         this.toastr.success('Submitted Successfully', 'Stock Detail register');
       },
       (err) => {
-        console.log(err);
+        this.toastr.error('Error Adding Stock Detail', err.error.message);
       }
     );
   }
