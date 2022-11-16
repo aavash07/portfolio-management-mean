@@ -119,7 +119,28 @@ router.get('/:id', async (req, res) => {
   return res.status(200).json({ message: 'Success', data: stockDetail });
 });
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
+  let buyStockDetails = await StockDetail.find(
+    { stock: req.body.stockId, transactionType: 'buy' },
+    { quantity: 1, _id: 0 }
+  );
+  buyStockDetails = buyStockDetails
+    .map((a) => a.quantity)
+    .reduce((a, b) => a + b, 0);
+  let sellStockDetails = await StockDetail.find(
+    { stock: req.body.stockId, transactionType: 'sell' },
+    { quantity: 1, _id: 0 }
+  );
+  sellStockDetails = sellStockDetails
+    .map((a) => a.quantity)
+    .reduce((a, b) => a + b, 0);
+  if (req.body.transactionType == 'sell') {
+    sellStockDetails += req.body.quantity;
+    if (sellStockDetails > buyStockDetails)
+      return res
+        .status(400)
+        .send({ message: 'Cannot Sell Stock More than existing quantity' });
+  }
   var stockDetail = new StockDetail({
     transactionType: req.body.transactionType,
     quantity: req.body.quantity,
