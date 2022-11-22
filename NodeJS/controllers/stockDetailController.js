@@ -178,11 +178,9 @@ router.put('/:id', (req, res) => {
     (err, docs) => {
       //new parameter declares we need the updated docs returned ie new
       if (!err) {
-        res.send(docs);
+        return res.status(200).json({ message: 'Success', data: docs });
       } else {
-        console.log(
-          'Error in updating stock detail: ' + JSON.stringify(err, undefined, 2)
-        );
+        return res.status(400).json({ message: `Error in updating stock detail` });
       }
     }
   );
