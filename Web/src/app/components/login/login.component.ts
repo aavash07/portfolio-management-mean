@@ -57,4 +57,20 @@ export class LoginComponent
   gotToRegister(): void {
     this.router.navigate(['register']);
   }
+
+  public getEmailErrorMsg(): string {
+    if (this.loginForm.controls.email.errors.required) {
+      return 'Email is required.';
+    } else {
+      return 'Email must be a valid email address.';
+    }
+  }
+
+  public getPasswordErrorMsg(): string {
+    if (this.loginForm.controls.password.errors.required) {
+      return 'Password is required.  ';
+    } else {
+      return 'Password must be longer than 7 characters.';
+    }
+  }
 }

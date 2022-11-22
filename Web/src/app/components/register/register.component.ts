@@ -31,8 +31,8 @@ export class RegisterComponent
       {
         name: ['', [Validators.required]],
         email: ['', [Validators.required, Validators.email]],
-        password: ['', [Validators.required]],
-        confirmPassword: ['', [Validators.required]],
+        password: ['', [Validators.required, Validators.minLength(8)]],
+        confirmPassword: ['', [Validators.required, Validators.minLength(8)]],
       },
       {
         validator: ConfirmPasswordValidator.passwordMatchValidator,
@@ -71,5 +71,29 @@ export class RegisterComponent
 
   gotToLogin(): void {
     this.router.navigate(['login']);
+  }
+
+  public getEmailErrorMsg(): string {
+    if (this.registerForm.controls.email.errors.required) {
+      return 'Email is required.';
+    } else {
+      return 'Email must be a valid email address.';
+    }
+  }
+
+  public getPasswordErrorMsg(): string {
+    if (this.registerForm.controls.password.errors.required) {
+      return 'Password is required.  ';
+    } else {
+      return 'Password must be longer than 7 characters.';
+    }
+  }
+
+  public getFullNameErrorMsg(): string {
+    if (this.registerForm.controls.name.errors.required) {
+      return 'Name is required.';
+    } else {
+      return '';
+    }
   }
 }
