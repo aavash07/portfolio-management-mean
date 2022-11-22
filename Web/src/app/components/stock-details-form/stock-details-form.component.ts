@@ -14,7 +14,7 @@ import { subscribedContainerMixin } from 'src/app/Shared/subscribedContainer.mix
 @Component({
   selector: 'app-stock-details-form',
   templateUrl: './stock-details-form.component.html',
-  styleUrls: ['./stock-details-form.component.scss']
+  styleUrls: ['./stock-details-form.component.scss'],
 })
 export class StockDetailsFormComponent
   extends subscribedContainerMixin()
@@ -78,7 +78,7 @@ export class StockDetailsFormComponent
     this.stockDetailsForm.patchValue({
       transactionDate: this.datePipe.transform(
         this.stockDetail.transactionDate,
-        'dd/MM/yyyy'
+        'yyyy-MM-dd'
       ),
     });
     this.stockDetailsForm.patchValue({
@@ -100,10 +100,8 @@ export class StockDetailsFormComponent
       const mappedStockDetail = plainToClass(StockDetail, stockDetail);
       if (stockDetailId) {
         this.updateRecord(mappedStockDetail);
-        this.router.navigate(['']);
       } else {
         this.insertRecord(mappedStockDetail);
-        this.router.navigate(['']);
       }
     }
   }
@@ -113,6 +111,7 @@ export class StockDetailsFormComponent
       (res) => {
         this.stockDetailsForm.reset();
         this.toastr.success('Submitted Successfully', 'Stock Detail register');
+        this.router.navigate(['']);
       },
       (err) => {
         this.toastr.error('Error Adding Stock Detail', err.error.message);
@@ -125,9 +124,10 @@ export class StockDetailsFormComponent
       (res) => {
         this.stockDetailsForm.reset();
         this.toastr.info('Updated Successfully', 'Stock Detail update');
+        this.router.navigate(['']);
       },
       (err) => {
-        console.log(err);
+        this.toastr.error('Error Updating Stock Detail', err.error.message);
       }
     );
   }
