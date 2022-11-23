@@ -68,10 +68,9 @@ router.get('/stock_profit', async (req, res) => {
     profit = 0;
     boughtUnits = 0;
     soldUnits = 0;
-    const stockDetails = await StockDetail.find().populate({
-      path: 'stock',
-      match: { id: `${stock._id}` },
-    });
+    const stockDetails = await StockDetail.find({
+      stock: `${stock._id}`,
+    }).populate('stock');
     if (!stockDetails.length)
       return res.status(403).json({ message: 'No data in dataBase' });
 
@@ -180,7 +179,9 @@ router.put('/:id', (req, res) => {
       if (!err) {
         return res.status(200).json({ message: 'Success', data: docs });
       } else {
-        return res.status(400).json({ message: `Error in updating stock detail` });
+        return res
+          .status(400)
+          .json({ message: `Error in updating stock detail` });
       }
     }
   );
